@@ -2,41 +2,35 @@ import logging
 import requests
 
 from json_work import current_path, json_reader
+from logger import script_logger
 
 
-logger = logging.getLogger("hh resume auto updater")
+logger = logging.getLogger('Script')
 logger.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger.addHandler(script_logger)
 
-hh = logging.StreamHandler()
-hh.setFormatter(formatter)
-logger.addHandler(hh)
-
-
-api_token: str = json_reader(file_name=f"{current_path}/users.json").get("apiToken")
+api_token: str = json_reader(file_name=f"{current_path}/resources/api_token.json").get("apiToken")
 
 request = requests.Session()
 request.headers.update({'Authorization': f'Bearer {api_token}'})
 
 
 def get_resume_list() -> list:
-    url = f'https://api.hh.ru/resumes/mine'
+    url: str = f'https://api.hh.ru/resumes/mine'
     result = request.get(url=url)
 
     if result.status_code == 200:
-        data = result.json()
-
+        data: dict = result.json()
         resume_ids: list = [resume['id'] for resume in data['items']]
 
         logger.info('Loaded resume list: {0} items)'.format(len(resume_ids)))
-
         return resume_ids
     else:
         logger.error(msg="Can't get resume list from hh.ru!")
 
 
-def update_resume(resume_id):
-    url = f'https://api.hh.ru/resumes/{resume_id}/publish'
+def update_resume(resume_id: str) -> None:
+    url: str = f'https://api.hh.ru/resumes/{resume_id}/publish'
     request.post(url=url)
 
     if request.status_code == 204:
@@ -51,7 +45,7 @@ def update_resume(resume_id):
         logger.error(f'{resume_id}: unknown status')
 
 
-def check_variables():
+def check_variables() -> None:
     if json_reader(file_name=f"{current_path}/resources/api_token.json")["apiToken"] != "":
         users: dict = json_reader(file_name=f"{current_path}/resources/users.json")
         for key, item in users.items(users):
