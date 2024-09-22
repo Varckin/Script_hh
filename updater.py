@@ -31,7 +31,7 @@ class Resume_updater():
         }
         users.update(user)
         json_write(file_name=f"{current_path}/resources/data_users.json", data_to_write=users)
-        logger.info("create dict of user and open browser")
+        logger.info(f"create dict of {self.user} and open browser")
         webbrowser.open(url=url)
 
     def check_authCode_user(self) -> bool:
@@ -39,13 +39,13 @@ class Resume_updater():
         user_data: dict = users.get(self.user)
         if user_data is not None:
             if user_data.get("authorization_code") is not None:
-                logger.info("user and authorization_code in base yes")
+                logger.info(f"{self.user} and authorization_code in base yes")
                 return True
             else:
                 logger.error("authorization_code no base")
                 return False
         else:
-            logger.error("user no base")
+            logger.error(f"{self.user} no base")
             return False
     
     def get_token_user(self, authorization_code: str) -> None:
