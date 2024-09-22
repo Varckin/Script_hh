@@ -25,14 +25,14 @@ def main(user: str):
                     users: dict = json_reader(file_name=f"{current_path}/resources/data_users.json")
                     for id in users.get(user)["list_resume_ids"]:
                         updater.update_resume(resume_id=id)
-                        logger.info("I going sleep...zzzzz")
+                    logger.info("I going sleep...zzzzz")
                     time.sleep(250 * 60)
                 else:
                     updater.get_resume_list()
                     users: dict = json_reader(file_name=f"{current_path}/resources/data_users.json")
                     for id in users.get(user)["list_resume_ids"]:
                         updater.update_resume(resume_id=id)
-                        logger.info("I going sleep...zzzzz")
+                    logger.info("I going sleep...zzzzz")
                     time.sleep(250 * 60)
             else:
                 users: dict = json_reader(file_name=f"{current_path}/resources/data_users.json")
@@ -40,17 +40,14 @@ def main(user: str):
         else:
             updater.oauth_user()
             stop_thread = False
-            logger.info(f"No auth_token {user}")
+            logger.error(f"No auth_token {user}")
 
 
 if __name__ == '__main__':
-    thread_1 = threading.Thread(target=main, args=("",))
-    thread_2 = threading.Thread(target=main, args=("",))
+    thread_1 = threading.Thread(target=main, args=("XYZ",))
 
     thread_1.start()
-    thread_2.start()
 
     thread_1.join()
-    thread_2.join()
 
-    logger.info("Threads stoped")
+    logger.info("Thread stoped")
