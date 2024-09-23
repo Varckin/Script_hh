@@ -40,7 +40,6 @@ def main(user: str):
         else:
             updater.oauth_user()
             stop_thread = False
-            logger.error(f"No auth_token {user}")
 
 
 if __name__ == '__main__':
